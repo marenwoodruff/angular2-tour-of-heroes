@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero';
 import { HeroDetailComponent } from './hero-detail.component';
+import { HeroService } from './hero.service';
 
 @Component({
   selector: 'my-app',
@@ -63,27 +64,25 @@ import { HeroDetailComponent } from './hero-detail.component';
       border-radius: 4px 0 0 4px;
     }
   `],
-  directives: [HeroDetailComponent]
+  directives: [HeroDetailComponent],
+  providers: [HeroService]
 })
 
-export class AppComponent { 
+export class AppComponent implements OnInit { 
   title = 'Tour of Heroes';
-  public heroes = HEROES;
+  heroes: Hero[];
   selectedHero: Hero;
+
+  constructor(private heroService: HeroService) { }
+
+  getHeroes() {
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+
+  ngOnInit() {
+    this.getHeroes();
+  }
 
   onSelect(hero: Hero) { this.selectedHero = hero; }
 }
 
-var HEROES: Hero[] = [
-  { "id": 10, "name": "Ruth Bader Ginsberg" },
-  { "id": 11, "name": "Loretta Ross" },
-  { "id": 12, "name": "Florynce Kennedy" },
-  { "id": 13, "name": "Alicia Garza" },
-  { "id": 14, "name": "Tatyana Fazlalizadeh" },
-  { "id": 15, "name": "Ai-jen Poo" },
-  { "id": 16, "name": "Gloria Anzaldúa" },
-  { "id": 17, "name": "Saru Jayaraman" },
-  { "id": 18, "name": "Charon Asetoyer" },
-  { "id": 19, "name": "Frida Kahlo" },
-  { "id": 20, "name": "Sally Ride" }
-];
